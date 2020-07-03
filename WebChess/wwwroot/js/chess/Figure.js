@@ -13,10 +13,10 @@ export class FigureType {
 }
 
 export class Figure {
-    constructor(color,figureType) {
+    constructor(color, figureType, canMoves) {
         this.color = color;
         this.figureType = figureType;
-        this.canMoves = [];
+        this.canMoves = canMoves;
     }
     drawFigure(cellElement) {
 

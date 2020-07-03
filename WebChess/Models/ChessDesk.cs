@@ -8,8 +8,8 @@ namespace WebChess.Models
 {
     public class ChessDesk
     {
-        public FigureColor  CurrentPlayer { get; set; }
-        public Figure[] ChessCells { get; set; }
+        public FigureColor  currentPlayer { get; set; }
+        public Figure[] Desk { get; set; }
 
         Figure[] Initial()
         {
@@ -38,8 +38,8 @@ namespace WebChess.Models
 
         public ChessDesk()
         {
-            CurrentPlayer = FigureColor.White;
-            ChessCells = Initial();
+            currentPlayer = FigureColor.White;
+            Desk = Initial();
         }
     }
 }

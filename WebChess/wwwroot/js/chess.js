@@ -10,7 +10,7 @@
 //import { Queen } from "./chess/Queen.js";
 //import { Rook } from "./chess/Rook.js";
 //import { ChessCell } from "./chess/ChessCell.js";
-import { ChessDesk, chessDesk } from "./chess/ChessDesk.js";
+import { ChessDesk, chessDesk, setChessDesk } from "./chess/ChessDesk.js";
 //import { CanMoveDestination } from "./chess/CanMoveDestination.js";
 import { appendDIV } from "./chess/Tools.js";
 
@@ -58,9 +58,11 @@ xhttp.open("GET", "/Chess?handler=desk", true);
 xhttp.setRequestHeader('Content-Type','application/json');
 xhttp.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
 xhttp.onload = function () {
-    if (xhttp.status === 0) {
-        var desk = JSON.parse(xhttp.responseText);
+    if (xhttp.status === 200) {
+        var result = JSON.parse(xhttp.response);
+        setChessDesk(new ChessDesk(result));
         chessDesk.refreshDesk();
+
     }
 };
 xhttp.onreadystatechange = function () {
@@ -69,7 +71,13 @@ xhttp.onreadystatechange = function () {
         var status = xhttp.status;
         if (status === 0 || (status >= 200 && status < 400)) {
             // The request has been completed successfully
-            console.log(xhttp.response);
+            //var result = JSON.parse(xhttp.response);
+
+            //result.__prototype__ = ChessDesk;
+            //chessDesk = result;
+            //chessDesk.refreshDesk();
+
+            //console.log(xhttp.response);
         } else {
             // Oh no! There has been an error with the request!
         }

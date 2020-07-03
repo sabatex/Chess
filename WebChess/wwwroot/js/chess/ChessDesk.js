@@ -17,34 +17,21 @@ import { CSSCellState } from "./CSSCellState.js";
 export function getCellElementByIndex(row, cell) {
     return document.getElementById("cell" + row + cell);
 }
+export function setChessDesk(value) {
+    chessDesk = value;
+}
 
 export class ChessDesk {
-    constructor() {
+    constructor(responseDesk) {
         this.desk = [];
-        for (let f of [FigureType.rook,
-            FigureType.house,
-            FigureType.bishop,
-            FigureType.queen,
-            FigureType.king,
-            FigureType.bishop,
-            FigureType.house,
-            FigureType.rook]) {
-            this.desk.push(new Figure(FigureColor.black, f));
+        this.currentPlayer = responseDesk.currentPlayer;
+        for (let f of responseDesk.desk) {
+            if (f === null) 
+                this.desk.push(undefined);
+            else
+                this.desk.push(new Figure(f.color, f.figureType, f.canMoves));
         }
-        for (let i = 0; i < 8; i++) this.desk.push(new Figure(FigureColor.black, FigureType.pawn));
-        for (let i = 0; i < 32; i++) this.desk.push(undefined);
-        for (let i = 0; i < 8; i++) this.desk.push(new Figure(FigureColor.white, FigureType.pawn)); 
-        for (let f of [FigureType.rook,
-        FigureType.house,
-        FigureType.bishop,
-        FigureType.king,
-        FigureType.queen,
-            FigureType.bishop,
-            FigureType.house,
-            FigureType.rook]) {
-            this.desk.push(new Figure(FigureColor.white, f));
-        }
-        this.currentPlayer = FigureColor.white;
+
     }
     getCell(row, column) {
         return this.desk[row * 8 + column];
@@ -306,6 +293,6 @@ export class ChessDesk {
 //    }
 //}
 
-export var chessDesk = new ChessDesk();
+export var chessDesk = undefined;
 
 
