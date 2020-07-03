@@ -12,6 +12,7 @@
 import { Figure, FigureType } from "./Figure.js";
 import { FigureColor } from "./FigureColor.js";
 import { CSSCellState } from "./CSSCellState.js";
+import { CanMoveDestination } from "./CanMoveDestination.js";
 
 
 export function getCellElementByIndex(row, cell) {
@@ -26,10 +27,16 @@ export class ChessDesk {
         this.desk = [];
         this.currentPlayer = responseDesk.currentPlayer;
         for (let f of responseDesk.desk) {
-            if (f === null) 
+            if (f === null)
                 this.desk.push(undefined);
-            else
-                this.desk.push(new Figure(f.color, f.figureType, f.canMoves));
+            else {
+                let canMoves = [];
+                for (let c of f.canMoves) {
+                    canMoves.push(new CanMoveDestination(c.row, c.column, c.state));
+                }
+
+                this.desk.push(new Figure(f.color, f.figureType, canMoves));
+            }
         }
 
     }
@@ -55,26 +62,7 @@ export class ChessDesk {
 
 
     }
-    //putFigures() {
-    //    this.desk.push(new ChessCell(0, 0, new Rook(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 1, new Horse(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 2, new Bishop(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 3, new Queen(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 4, new King(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 5, new Bishop(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 6, new Horse(FigureColor.black), deskElement));
-    //    this.desk.push(new ChessCell(0, 7, new Rook(FigureColor.black), deskElement));
-    //    for (let i = 0; i < 8; i++) this.desk.push(new ChessCell(1, i, new Pawn(FigureColor.black), deskElement));
-    //    for (let i = 0; i < 8; i++) this.desk.push(new ChessCell(6, i, new Pawn(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 0, new Rook(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 1, new Horse(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 2, new Bishop(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 3, new King(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 4, new Queen(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 5, new Bishop(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 6, new Horse(FigureColor.white), deskElement));
-    //    this.desk.push(new ChessCell(7, 7, new Rook(FigureColor.white), deskElement));
-    //}
+
 
 
     //_currentPlayer = FigureColor.white;

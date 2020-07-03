@@ -1,6 +1,7 @@
 ﻿export class CanMoveDestination {
-    constructor(cell, moveState) {
-        this.cell = cell;
+    constructor(row,column, moveState) {
+        this.row = row;
+        this.column = column;
         this.moveState = moveState;
     }
 }

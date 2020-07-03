@@ -12,5 +12,6 @@ namespace WebChess.Data
         public string UserMove { get; set; }
         public string Step { get; set; }
         public string Desk { get; set; }
+        public ChessParty ChessParty { get; set; }
     }
 }
