@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace WebChess.Data
         public string UserBlack { get; set; }
         public DateTime StartDate { get; set; }
         public int? LastParty { get; set; }
+
     }
 }

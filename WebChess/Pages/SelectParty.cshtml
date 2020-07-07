@@ -7,7 +7,19 @@
 
 <form method="post" name="SelectParty" >
     <input asp-for="IsNew" />
-    <select asp-for="MyParties"></select>
+    @if (Model.MyParties.Count != 0)
+    {
+        <select asp-for="SelectedParty">
+            @foreach (var cnt in Model.MyParties)
+            {
+                <option value="@cnt.Id">@cnt.Id</option>
+            }
+        </select>
+    }
+    else
+    {
+
+    }
     <input type="submit" value="Ок"/>
 </form>
 
