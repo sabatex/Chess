@@ -8,10 +8,9 @@ namespace WebChess.Data
     public class ChessParty
     {
         public int Id { get; set; }
-        public string WhiteUser { get; set; }
-        public string BlackUser { get; set; }
-        public DateTime StartTime { get; set; }
-        public string Desk { get; set; } // initial
-
+        public string UserWhite { get; set; }
+        public string UserBlack { get; set; }
+        public DateTime StartDate { get; set; }
+        public int? LastParty { get; set; }
     }
 }

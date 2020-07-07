@@ -48,12 +48,65 @@ namespace WebChess.Models
         {
             return Desk[row * 8 + column];
         }
+        MoveState CheckMovePawn(Figure figure, int row, int column, int destinationRow, int destinationColumn)
+        {
+            if (row == destinationRow && column == destinationColumn) return MoveState.Cannot;
+            // index for direction
+            var idx = figure.Direction;
+            var targetCell = GetFigureById(destinationRow, destinationColumn);
+            if (destinationRow == row + idx)
+            {
+                // try fight
+                if (destinationColumn == column + 1 || destinationColumn == column - 1)
+                {
+                    if (targetCell != null)
+                    {
+                        if (targetCell.Color != figure.Color)
+                        {
+                            return MoveState.Fight;
+                        }
+                    }
+                    return MoveState.Cannot; // not beat self color
+                }
+                if (column == destinationColumn)
+                {
+                    if (targetCell == null)
+                    {
+                        return MoveState.Can;
+                    }
+                }
+                return MoveState.Cannot;
+            }
+
+            if (destinationRow == row + idx + idx && destinationColumn == column && figure.FistMove)
+            {
+                if (targetCell == null)
+                {
+                    var roadCell =  GetFigureById(row + idx, column);
+                    if (roadCell == null)
+                    {
+                        return MoveState.Can;
+                    }
+                }
+            }
+            return MoveState.Cannot;
+        }
+
 
         MoveState CheckMove(Figure figure, int row, int column, int destinationRow, int destinationColumn)
         {
             if (currentPlayer != figure.Color) return MoveState.Cannot;
+            switch (figure.FigureType)
+            {
+                case FigureType.Pawn:return CheckMovePawn(figure, row, column, destinationRow, destinationColumn);
+
+            }
+
+
+
+
             
-            return MoveState.Can;
+            return MoveState.Cannot;
         }
 
 
@@ -69,7 +122,7 @@ namespace WebChess.Models
                     var r = CheckMove(figure, row, column, i, j);
                     if (r == MoveState.Can || r == MoveState.Fight)
                     {
-                        result.Add(new DestinationCell() { Column = i, Row = j, State = r });
+                        result.Add(new DestinationCell() { Column = j, Row = i, State = r });
                     }
                 }
             }

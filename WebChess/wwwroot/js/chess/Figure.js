@@ -30,18 +30,6 @@ export class Figure {
             default: return undefined;
         }
     }
-
-
-    //checkMove(rowPos, columnPos, rowDestination, columnDestination, board) {
-    //    return MoveState.cannot;
-    //}
-    //get direction() { return this.color * 2 - 1; }
-    //getDraw(cellElement) {
-    //    let draw = SVG(cellElement);
-    //    this.figureId = draw.node.id;
-    //    return draw;
-    //}
-
 }
 
 

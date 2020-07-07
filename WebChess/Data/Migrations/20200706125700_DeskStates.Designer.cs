@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebChess.Data;
 
 namespace WebChess.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200706125700_DeskStates")]
+    partial class DeskStates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,7 +252,7 @@ namespace WebChess.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ChessPartyId")
+                    b.Property<int?>("ChessPartyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Desk")
@@ -330,9 +332,7 @@ namespace WebChess.Data.Migrations
                 {
                     b.HasOne("WebChess.Data.ChessParty", "ChessParty")
                         .WithMany()
-                        .HasForeignKey("ChessPartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChessPartyId");
                 });
 #pragma warning restore 612, 618
         }

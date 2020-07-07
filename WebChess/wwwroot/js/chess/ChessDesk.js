@@ -13,17 +13,22 @@ import { Figure, FigureType } from "./Figure.js";
 import { FigureColor } from "./FigureColor.js";
 import { CSSCellState } from "./CSSCellState.js";
 import { CanMoveDestination } from "./CanMoveDestination.js";
+import { MoveState } from "./MoveState.js";
+import { CellPoint } from "./CellPoint.js";
 
 
 export function getCellElementByIndex(row, cell) {
     return document.getElementById("cell" + row + cell);
 }
+
 export function setChessDesk(value) {
     chessDesk = value;
 }
 
+
 export class ChessDesk {
     constructor(responseDesk) {
+        this.waitForResponse = true;
         this.desk = [];
         this.currentPlayer = responseDesk.currentPlayer;
         for (let f of responseDesk.desk) {
@@ -44,7 +49,18 @@ export class ChessDesk {
         return this.desk[row * 8 + column];
     }
 
+    getDestinationFromCell(htmlElement) {
+        let id = htmlElement.id;
+        return new CellPoint(Number(id[4]), Number(id[5])); 
+    }
+
+    getCellByElement(htmlElement) {
+        let dest = this.getDestinationFromCell(htmlElement);
+        return this.getCell(dest.row, dest.column);
+    }
+
     refreshDesk() {
+        chessDesk.waitForResponse = false;
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
                 let cell = this.getCell(i, j);
@@ -63,110 +79,75 @@ export class ChessDesk {
 
     }
 
+    clearClassInDesk(className) {
+        let elements = document.getElementsByClassName(className);
+        while (elements.length) {
+            elements[0].classList.remove(className);
+        }
+    }
+
+    clearSelectedCell() {
+        this.clearClassInDesk(CSSCellState.cellSelected);
+        this.clearClassInDesk(CSSCellState.chessCellDestinationMark);
+        this.clearClassInDesk(CSSCellState.figureMustFight);
+    }
+
+    setSelectedCell(cellElement) {
+        cellElement.classList.add(CSSCellState.cellSelected);
+        let figure = this.getCellByElement(cellElement);
+        for (let dest of figure.canMoves) {
+            let destElement = getCellElementByIndex(dest.row, dest.column);
+
+            if (dest.moveState == MoveState.fight) {
+                destElement.classList.add(CSSCellState.canBeat);
+            }
+            destElement.classList.add(CSSCellState.chessCellDestinationMark);
+        }
+    }
+
+    clickToSameCell(cellElement) {
+        this.clearSelectedCell();
+    }
 
 
-    //_currentPlayer = FigureColor.white;
-    //get currentPlayer() { return this._currentPlayer }
-    //set currentPlayer(value) {
-    //    this._currentPlayer = value;
-    //    this.clearClassInDesk(Defines.chessCellCanMove);
-    //    this.setHoverForCells();
-    //}
+    clickToCanMoveCell(cellElement) {
+        this.clearSelectedCell();
+        this.setSelectedCell(cellElement);
+    }
 
-    //_selectedCell = undefined;
-
-    //clearClassInDesk(className) {
-    //    let elements = document.getElementsByClassName(className);
-    //    while (elements.length) {
-    //        elements[0].classList.remove(className);
-    //    }
-    //}
+    clickToAnOtherCell(cellElement) {
+        if (!cellElement.classList.contains(CSSCellState.chessCellDestinationMark))
+            this.clearSelectedCell();
+        else
+            this.moveFigure(cellElement);
+    }
 
 
-    //clearSelectedCell() {
-    //    this.clearClassInDesk(Defines.cellSelected);
-    //    this.clearClassInDesk(Defines.chessCellDestinationMark);
-    //    this.clearClassInDesk(Defines.figureMustFight);
-    //}
-
-    //setSelectedCell(cellElement) {
-    //    cellElement.classList.add(Defines.cellSelected);
-    //    let cm = this.getCellById(cellElement.id).canMoves;
-    //    for (let canMove of cm) {
-    //        if (canMove.moveState == MoveState.fight) {
-    //            canMove.cell.canBeat = true;
-    //        }
-    //        canMove.cell.cellElement.classList.add(Defines.chessCellDestinationMark);
-    //    }
-    //}
-
-    //clickToSameCell(cellElement) {
-    //    this.clearSelectedCell();
-    //}
-    //clickToCanMoveCell(cellElement) {
-    //    this.clearSelectedCell();
-    //    this.setSelectedCell(cellElement);
-    //}
-    //clickToAnOtherCell(cellElement) {
-    //    if (!cellElement.classList.contains(Defines.chessCellDestinationMark))
-    //        this.clearSelectedCell();
-    //    else
-    //        this.moveFigure(cellElement);
-    //}
-
-
-
-    //// return cell by id
-    //getCellById(id) {
-    //    let row = Number(id[4]);
-    //    let column = Number(id[5]);
-    //    return this.getCell(row, column);
-    //}
-    //clearCanMovePositions() {
-    //    let el = document.getElementsByClassName(window.Defines.chessCellDestinationMark);
-    //    while (el.length) {
-    //        el[0].classList.remove(window.Defines.chessCellDestinationMark);
-    //    }
-    //}
-    //removeFigure(cell) {
-    //    cell.figure = undefined;
-    //}
-
-
-    //// move selected figure to destination cell
-    //moveFigure(cellElement) {
-    //    let selectedElement = document.getElementsByClassName(Defines.cellSelected)[0];
-    //    this.clearSelectedCell();
-    //    let cell = this.getCellById(selectedElement.id);
-    //    let targetCell = this.getCellById(cellElement.id);
-    //    if (targetCell.figure != undefined) this.removeFigure(targetCell);
-    //    targetCell.figure = cell.figure;
-    //    cell.figure = undefined;
-    //    if (this.currentPlayer == FigureColor.white)
-    //        this.currentPlayer = FigureColor.black;
-    //    else
-    //        this.currentPlayer = FigureColor.white;
-    //    // Ajax
-    //    let xhttp = new XMLHttpRequest();
-    //    let msg = JSON.stringify({ "row": cell.row, "column": cell.column, "destinationRow": targetCell.row, "destinationColumn": targetCell.column });
-    //    let fdPost = new FormData();
-    //    fdPost.append("row", cell.row);
-    //    fdPost.append('column', cell.column);
-    //    fdPost.append('destinationRow', targetCell.row);
-    //    fdPost.append('destinationColumn', targetCell.column);
-
-    //    //fdPost.append("data", msg);
-    //    xhttp.open("POST", "/Chess?handler=move", true);
-    //    xhttp.timeout = 9000;
-    //    ////xhttp.responseType = "json";
-    //    //xhttp.setRequestHeader("Content-Type", 'application/json; charset=utf-8');
-    //    xhttp.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
-    //    //xhttp.onload = function () {
-    //    //    if (xhttp.status === 200) {
-    //    //        //var userInfo = JSON.parse(xhttp.responseText);
-    //    //    }
-    //    //};
-    //    xhttp.send(fdPost);
+    // move selected figure to destination cell
+    moveFigure(cellElement) {
+        let selectedElement = document.getElementsByClassName(CSSCellState.cellSelected)[0];
+        let cell = this.getDestinationFromCell(selectedElement);
+        let targetCell = this.getDestinationFromCell(cellElement);
+        // Ajax
+        let xhttp = new XMLHttpRequest();
+        let msg = JSON.stringify({ "row": cell.row, "column": cell.column, "destinationRow": targetCell.row, "destinationColumn": targetCell.column });
+        let fdPost = new FormData();
+        fdPost.append("row", cell.row);
+        fdPost.append('column', cell.column);
+        fdPost.append('destinationRow', targetCell.row);
+        fdPost.append('destinationColumn', targetCell.column);
+        xhttp.open("POST", "/Chess?handler=move", true);
+        xhttp.timeout = 9000;
+        xhttp.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+        xhttp.onload = function () {
+            if (xhttp.status === 200) {
+                var userInfo = JSON.parse(xhttp.responseText);
+                }
+            };
+        xhttp.send(fdPost);
+        this.clearSelectedCell();
+        this.clearClassInDesk(CSSCellState.chessCellCanMove);
+        this.waitForResponse = true;
 
     //    //$.ajax({
     //    //    type: "POST",
@@ -190,7 +171,7 @@ export class ChessDesk {
     //    //    }
     //    //})
 
-    //}
+    }
 
     //selectFigure(cellElement) {
     //    // if exist selected figure
@@ -230,13 +211,6 @@ export class ChessDesk {
     //    }
 
     //}
-    //addDivElement(html, className, owner) {
-    //    let gripDeskCell = document.createElement("div");
-    //    gripDeskCell.innerHTML = html;
-    //    gripDeskCell.style.userSelect = 'none';
-    //    gripDeskCell.classList.add(className);//<div class="gripDeskRow">a</div>
-    //    owner.appendChild(gripDeskCell);
-    //}
     //getCell(row, column) {
     //    return this.desk[row * 8 + column];
     //}
@@ -270,16 +244,17 @@ export class ChessDesk {
 
 }
 
-//function chessDeskCellClick(event) {
-//    if (this.classList.contains(Defines.cellSelected)) // DOM
-//        chessDesk.clickToSameCell(this);
-//    else {
-//        if (this.classList.contains(Defines.chessCellCanMove))
-//            chessDesk.clickToCanMoveCell(this);
-//        else
-//            chessDesk.clickToAnOtherCell(this);
-//    }
-//}
+export function chessDeskCellClick(event) {
+    if (chessDesk == undefined) return;
+    if (this.classList.contains(CSSCellState.cellSelected)) // DOM
+        chessDesk.clickToSameCell(this);
+    else {
+        if (this.classList.contains(CSSCellState.chessCellCanMove))
+            chessDesk.clickToCanMoveCell(this);
+        else
+            chessDesk.clickToAnOtherCell(this);
+    }
+}
 
 export var chessDesk = undefined;
 

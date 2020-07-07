@@ -8,10 +8,19 @@
     margin-left: 5px;
 }
 
+.playerStatus {
+    width: 200px;
+    color: red;
+    height: 40px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 .userDashBoard{
     width: 200px;
-    height: 220px;
+    height: 200px;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;

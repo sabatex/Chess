@@ -10,7 +10,7 @@
 //import { Queen } from "./chess/Queen.js";
 //import { Rook } from "./chess/Rook.js";
 //import { ChessCell } from "./chess/ChessCell.js";
-import { ChessDesk, chessDesk, setChessDesk } from "./chess/ChessDesk.js";
+import { ChessDesk, chessDesk, setChessDesk, chessDeskCellClick } from "./chess/ChessDesk.js";
 //import { CanMoveDestination } from "./chess/CanMoveDestination.js";
 import { appendDIV } from "./chess/Tools.js";
 
@@ -41,11 +41,14 @@ for (let i = 0; i < 8; i++) {
         let cellElement = appendDIV(chessTableElement, "chessCell", "");
         if ((i + j) % 2) cellElement.classList.add("blackCell");
         cellElement.id = "cell" + i + j;
+        cellElement.onclick = chessDeskCellClick;
+
     }
 }
 
 // Player Desk
 var playerDeskElement = appendDIV(htmlElement, "playerDesk", "");
+appendDIV(playerDeskElement, "playerStatus", "Please wait ...");
 
 appendDIV(playerDeskElement, "userBlackDashBoard userDashBoard", "");
 appendDIV(playerDeskElement, "userWhiteDashBoard userDashBoard", "");
@@ -84,12 +87,5 @@ xhttp.onreadystatechange = function () {
     }
 };
 xhttp.send();
-
-
-// initial chess desk
-//chessDesk.refreshDesk(); 
-
-
-
 
 
