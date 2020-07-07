@@ -50,6 +50,10 @@ namespace WebChess.Pages
                     return RedirectToPage("/Chess");
 
                 }
+                else
+                {
+
+                }
 
             }
             return Page();
