@@ -13,7 +13,6 @@
 import { ChessDesk, chessDesk, setChessDesk, chessDeskCellClick } from "./chess/ChessDesk.js";
 //import { CanMoveDestination } from "./chess/CanMoveDestination.js";
 import { appendDIV } from "./chess/Tools.js";
-
 function drawChessTableOutside(htmlElement){
     for (let s of ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', '']) {
         appendDIV(htmlElement, "gripDeskRow", s);
@@ -52,7 +51,6 @@ appendDIV(playerDeskElement, "playerStatus", "Please wait ...");
 
 appendDIV(playerDeskElement, "userBlackDashBoard userDashBoard", "");
 appendDIV(playerDeskElement, "userWhiteDashBoard userDashBoard", "");
-
 //ajax get desk
 let xhttp = new XMLHttpRequest();
 
