@@ -1,6 +1,13 @@
 .chessDesk{
-    display:flex;
-    flex-direction: row;
+    display:grid;
+    grid-template-columns:auto auto;
+    box-sizing: border-box;
+}
+
+.leftPanel {
+    box-sizing: border-box;
+}
+.rightPanel {
     box-sizing: border-box;
 }
 .playerDesk{

@@ -18,7 +18,7 @@ namespace WebChess.Pages
 
         [BindProperty]
         public bool IsNew { get; set; }
-        public List<ChessParty> MyParties { get; set; }
+        public ChessParty[] MyParties { get; set; }
         public ChessParty[] EnabledParties { get; set; }
         ApplicationDbContext dbContext;
         public SelectPartyModel(ApplicationDbContext dbContext)
@@ -29,8 +29,8 @@ namespace WebChess.Pages
         
         public async Task OnGet()
         {
-            MyParties = await dbContext.ChessParties.Where(s => s.UserWhite == User.Identity.Name).ToListAsync();
-            EnabledParties = await dbContext.ChessParties.Where(s => s.UserWhite != User.Identity.Name && s.UserBlack == "").ToArrayAsync();
+            MyParties = await dbContext.ChessParties.Where(s => s.User1 == User.Identity.Name).ToArrayAsync();
+            EnabledParties = await dbContext.ChessParties.Where(s => s.User1 != User.Identity.Name && s.User2 == null).ToArrayAsync();
         }
 
         public async Task<IActionResult> OnPost()
@@ -42,7 +42,7 @@ namespace WebChess.Pages
                     var game = new ChessParty()
                     {
                         StartDate = DateTime.Now,
-                        UserWhite = User.Identity.Name
+                        User1 = User.Identity.Name
                     };
                     dbContext.ChessParties.Add(game);
                     await dbContext.SaveChangesAsync();
