@@ -114,6 +114,7 @@ namespace WebChess.Pages
             {
                 myNewGame = await dbContext.ChessParties.Where(s => s.User1 == user && s.User2 == null).ToArrayAsync(),
                 myGames = await dbContext.ChessParties.Where(s => s.User1 == user && s.User2 != null).ToArrayAsync(),
+                myJoinGames = await dbContext.ChessParties.Where(s => s.User1 != null && s.User2 == user).ToArrayAsync(),
                 waitForJoin = await dbContext.ChessParties.Where(s => s.User1 != user &&  s.User2 == null).ToArrayAsync()
             };
             return new JsonResult(result);

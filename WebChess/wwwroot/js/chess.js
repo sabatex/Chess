@@ -52,7 +52,13 @@ window.chess = new function () {
         }
     }
     this.initialSelectGame = function (gamesList) {
-        this.leftDesk.empty();
+        $('.blackCell').fadeToggle(1000, 0).fadeToggle(1000,1);
+
+        //window.chess.leftPanel.fadeOut(5000);
+        //window.chess.leftPanel.fadeIn(5000);
+
+
+        //window.chess.leftPanel.empty();
     }
     this.initialInfoPanel = function () {
 
@@ -89,6 +95,7 @@ window.chess = new function () {
     this.playerPanel1 = $('<DIV>').addClass(ChessConst.cssPlayer1).appendTo(this.rigthPanel);
     this.playerPanel2 = $('<DIV>').addClass(ChessConst.cssPlayer1).appendTo(this.rigthPanel);
 
+    this.initialDesk();
     let party = $('#Party').get(0).value;
     if (party == '') {
         this.state = GameState.waitForSelectGame;
@@ -97,7 +104,7 @@ window.chess = new function () {
     
 
 
-    this.initialDesk();
+    
 }
 
 
