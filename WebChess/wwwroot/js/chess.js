@@ -1,6 +1,62 @@
-import { ChessDesk, chessDesk, setChessDesk, chessDeskCellClick } from "./chess/ChessDesk.js";
+﻿import { ChessDesk, chessDesk, setChessDesk, chessDeskCellClick } from "./chess/ChessDesk.js";
 import { ChessConst, GameState } from "./chess/GameState.js";
 import { getEnabledGames } from "./chess/ServerApi.js";
+
+
+function appendLoader() {
+    let loader = $(`<div class="bg-white d-flex align-items-center justify-content-center border-left-0 border-right-0 border-top-0 border-bottom rounded-0 w-100 text-center" id ="loader" style="display:none !important;">
+       <span class="mr-5">Загрузка...</span>
+       <div class="spinner" id="spinner">
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+            <div class="spinner-blade"></div>
+        </div>
+    </div>`);
+    if ($('#loader').length !== 0) {
+        return true;
+    }
+    else{
+        let menu = $('#chessMenu');
+        loader.appendTo(menu).show("slow");
+        return false;
+    }
+    let menu = $('#chessMenu');
+    loader.appendTo(menu).show("slow");
+
+
+}
+function removeLoader() {
+    $('#loader').hide("slow", function(){
+        $(this).remove();
+    });
+}
+
+function drawGameList(color,mainContainer) {
+    let gameInfo = $('<div class="container-fluid d-flex justify-content-center aling-items-center">').appendTo(mainContainer);
+    $(`<h3 class="d-inline-flex text-center pt-2 pb-2 pl-5 pr-5 rounded-pill text-${color} mt-3 mb-3 border border-${color}">My Games</h3>`).appendTo(gameInfo);
+    let contentContainer = $('<div class="container-fluid w-100" style="height:70vh;overflow-y:scroll;"></div>').appendTo(mainContainer);
+    let header = $(`<div class="bg-${color} d-flex justify-content-around p-3 w-100 font-weight-bold text-uppercase"></div >`).appendTo(contentContainer);
+    $('<div class="text-white text-center w-25">ID</div><div class="text-white text-center w-100">Player 1</div><div class="text-white text-center w-100">Player 2</div>').appendTo(header);
+    for (let i = 1; i <= 10; i++) {
+        let content = $(`<div class="alert alert-${color} d-flex justify-content-around p-3 w-100 font-weight-bold border shadow-sm mt-2 gameList"></div>`).appendTo(contentContainer);
+        $(`<div class="w-25 text-center">${i}</div>`).appendTo(content);
+        $(`<div class="w-100 text-center">PlayerOne ${i}</div>`).appendTo(content);
+        $(`<div class="w-100 text-center">PlayerTwo ${i}</div>`).appendTo(content);
+    }
+    let count = $('.gameList').toArray().length;
+    $(`<h3 class="badge badge-danger badge-pill d-flex align-items-center justify-content-center font-weight-bold text-white" style="position:relative;right:2%;height:30px!important;width:30px!important;padding:25px;font-size:20px;">${count}</h3>`).appendTo(gameInfo);
+
+    window.setTimeout(removeLoader, 2000);
+}
 
 
 function drawChessTableOutside(htmlElement){
@@ -31,8 +87,9 @@ function selectGame() {
 
 window.chess = new function () {
     this.clickCell = function (event) {
-        let a = 10;
+        //let a = 10;
     }
+    
     this.initialDesk = function () {
         this.leftPanel.empty();
         for (let s of ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', '']) {
@@ -52,22 +109,94 @@ window.chess = new function () {
         }
     }
     this.initialSelectGame = function (gamesList) {
-        $('.blackCell').fadeToggle(1000, 0).fadeToggle(1000,1);
+        console.log(gamesList);
+        $(`#${ChessConst.mainElement}`).hide();
+        $('.menu-item-1').on('click', function () {
+            if (!appendLoader()) {
+                let mainContainer = $('#container');
+                mainContainer.empty();
+                window.setTimeout(() => {
+                    drawGameList('danger', mainContainer);
+                }, 5000);
+            }            
+        });
 
-        //window.chess.leftPanel.fadeOut(5000);
-        //window.chess.leftPanel.fadeIn(5000);
+        $('.menu-item-2').on('click', function () {
+            if (!appendLoader()) {
+                let mainContainer = $('#container');
+                mainContainer.empty();
+                window.setTimeout(() => {
+                    let gameInfo = $('<div class="container-fluid d-flex justify-content-center aling-items-center">').appendTo(mainContainer);
+                    $('<h3 class="d-inline-flex text-center pt-2 pb-2 pl-5 pr-5 rounded-pill text-primary mt-3 mb-3 border border-primary">Joined Games</h3>').appendTo(gameInfo);
+                    let contentContainer = $('<div class="container-fluid w-100" style="height:70vh;overflow-y:scroll;"></div>').appendTo(mainContainer);
+                    let header = $('<div class="bg-primary d-flex justify-content-around p-3 w-100 font-weight-bold text-uppercase"></div >').appendTo(contentContainer);
+                    $('<div class="text-white text-center w-25">ID</div><div class="text-white text-center w-100">Player 1</div><div class="text-white text-center w-100">Player 2</div>').appendTo(header);
+                    for (let i = 1; i <= 100; i++) {
+                        let content = $('<div class="bg-light d-flex justify-content-around p-3 w-100 font-weight-bold border shadow-sm mt-2 gameList"></div>').appendTo(contentContainer);
+                        $(`<div class="w-25 text-center">${i}</div>`).appendTo(content);
+                        $(`<div class="w-100 text-center">PlayerOne ${i}</div>`).appendTo(content);
+                        $(`<div class="w-100 text-center">PlayerTwo ${i}</div>`).appendTo(content);
+                    }
+                    let count = $('.gameList').toArray().length;
+                    $(`<h3 class="badge badge-primary badge-pill d-flex align-items-center justify-content-center font-weight-bold text-white" style="position:relative;right:2%;height:30px!important;width:30px!important;padding:25px;font-size:20px;">${count}</h3>`).appendTo(gameInfo);
+
+                    window.setTimeout(removeLoader,2000);
+                }, 5000);
+            }
+            
+        });
+
+        $('.menu-item-3').on('click', function () {
+            if (!appendLoader()) {
+                let mainContainer = $('#container');
+                mainContainer.empty();
+                window.setTimeout(() => {
+                    let gameInfo = $('<div class="container-fluid d-flex justify-content-center aling-items-center">').appendTo(mainContainer);
+                    $('<h3 class="d-inline-flex text-center pt-2 pb-2 pl-5 pr-5 rounded-pill text-success mt-3 mb-3 border border-success">My New Game</h3>').appendTo(gameInfo);
+                    let contentContainer = $('<div class="container-fluid w-100" style="height:70vh;overflow-y:scroll;"></div>').appendTo(mainContainer);
+                    let header = $('<div class="bg-success d-flex justify-content-around p-3 w-100 font-weight-bold text-uppercase"></div >').appendTo(contentContainer);
+                    $('<div class="text-white text-center w-25">ID</div><div class="text-white text-center w-100">Player 1</div><div class="text-white text-center w-100">Player 2</div>').appendTo(header);
+                    for (let i = 1; i <= 100; i++) {
+                        let content = $('<div class="bg-light d-flex justify-content-around p-3 w-100 font-weight-bold border shadow-sm mt-2 gameList"></div>').appendTo(contentContainer);
+                        $(`<div class="w-25 text-center">${i}</div>`).appendTo(content);
+                        $(`<div class="w-100 text-center">PlayerOne ${i}</div>`).appendTo(content);
+                        $(`<div class="w-100 text-center">PlayerTwo ${i}</div>`).appendTo(content);
+                    }
+                    let count = $('.gameList').toArray().length;
+                    $(`<h3 class="badge badge-success badge-pill d-flex align-items-center justify-content-center font-weight-bold text-white" style="position:relative;right:2%;height:30px!important;width:30px!important;padding:25px;font-size:20px;">${count}</h3>`).appendTo(gameInfo);
+
+                    window.setTimeout(removeLoader, 2000);
+
+                }, 5000);
+            }
+            
+            
+        });
 
 
-        //window.chess.leftPanel.empty();
-    }
-    this.initialInfoPanel = function () {
+        $('.menu-item-4').on('click', function () {
+            if (!appendLoader()) {
+                removeLoader();
+            }
+            let mainContainer = $('#container');
+            mainContainer.empty();
+            let gameInfo = $('<div class="container-fluid d-flex justify-content-center aling-items-center">').appendTo(mainContainer);
+            $('<h3 class="d-inline-flex text-center pt-2 pb-2 pl-5 pr-5 rounded-pill text-warning mt-3 mb-3 border border-warning">Online Games</h3>').appendTo(gameInfo);
+            let contentContainer = $('<div class="container-fluid w-100" style="height:70vh;overflow-y:scroll;"></div>').appendTo(mainContainer);
+            let header = $('<div class="bg-warning d-flex justify-content-around p-3 w-100 font-weight-bold text-uppercase"></div >').appendTo(contentContainer);
+            $('<div class="text-white text-center w-25">ID</div><div class="text-white text-center w-100">Player 1</div><div class="text-white text-center w-100">Player 2</div>').appendTo(header);
+            for (let i = 1; i <= 100; i++) {
+                let content = $('<div class="bg-light d-flex justify-content-around p-3 w-100 font-weight-bold border shadow-sm mt-2 gameList"></div>').appendTo(contentContainer);
+                $(`<div class="w-25 text-center">${i}</div>`).appendTo(content);
+                $(`<div class="w-100 text-center">PlayerOne ${i}</div>`).appendTo(content);
+                $(`<div class="w-100 text-center">PlayerTwo ${i}</div>`).appendTo(content);
+            }
+            removeLoader();
 
-    }
-    this.initialPlayer1 = function () {
+            let count = $('.gameList').toArray().length;
+            $(`<h3 class="badge badge-warning badge-pill d-flex align-items-center justify-content-center font-weight-bold text-white" style="position:relative;right:2%;height:30px!important;width:30px!important;padding:25px;font-size:20px;opacity:0.7;">${count}</h3>`).appendTo(gameInfo);
 
-    }
-    this.initialPlayer2 = function () {
-
+        });
     }
 
 
@@ -87,7 +216,7 @@ window.chess = new function () {
 
     // initial chess desk
     let mainElement = document.getElementById(ChessConst.mainElement);
-    this.leftPanel = $('<DIV>').attr('id', ChessConst.rightPanel)
+    this.leftPanel = $('<DIV>').attr('id', ChessConst.leftPanel)
         .addClass(ChessConst.cssChessTable).appendTo(mainElement);
 
     this.rigthPanel = $('<DIV>').addClass(ChessConst.rightPanel).appendTo(mainElement);

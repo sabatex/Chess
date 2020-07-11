@@ -9,7 +9,7 @@ using WebChess.Data;
 namespace WebChess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200709201155_initial")]
+    [Migration("20200710170444_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
