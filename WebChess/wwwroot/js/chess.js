@@ -183,11 +183,21 @@ window.chess = new function () {
     this.playerPanel2 = $('<DIV>').addClass(ChessConst.cssPlayer1).appendTo(this.rigthPanel);
 
     this.initialDesk();
-    let party = $('#Party').get(0).value;
-    if (party == '') {
-        this.state = GameState.waitForSelectGame;
-        return;
-    }
+    //var x = document.createElement("P");                        // Create a <p> element
+    //var t = document.createTextNode("This is a paragraph.");    // Create a text node
+    //x.appendChild(t);                                           // Append the text to <p>
+    //document.body.appendChild(x);
+    //let node = document.createN
+
+    let test = document.createElement('div').innerHTML = document.createTextNode("Привіт Світ");
+    document.body.appendChild(test);
+
+
+    //let party = $('#Party').get(0).value;
+    //if (party == '') {
+    //    this.state = GameState.waitForSelectGame;
+    //    return;
+    //}
     
 
 
