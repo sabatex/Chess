@@ -112,7 +112,7 @@ namespace WebChess.Pages
             var user = User.Identity.Name;
             var result = new
             {
-                myNewGame = await dbContext.ChessParties.SingleOrDefault(s => s.User1 == user && s.User2 == null).ToArrayAsync(),
+                myNewGame = await dbContext.ChessParties.SingleOrDefaultAsync(s => s.User1 == user && s.User2 == null),
                 myGames = await dbContext.ChessParties.Where(s => s.User1 == user && s.User2 != null).ToArrayAsync(),
                 myJoinGames = await dbContext.ChessParties.Where(s => s.User1 != null && s.User2 == user).ToArrayAsync(),
                 waitForJoin = await dbContext.ChessParties.Where(s => s.User1 != user &&  s.User2 == null).ToArrayAsync()
@@ -123,7 +123,7 @@ namespace WebChess.Pages
         public async Task<JsonResult> OnGetNewGame()
         {
             var user = User.Identity.Name;
-            var myNewGame = await dbContext.ChessParties.SingleOrDefault(s => s.User1 == user && s.User2 == null).ToArrayAsync();
+            var myNewGame = await dbContext.ChessParties.SingleOrDefaultAsync(s => s.User1 == user && s.User2 == null);
             if (myNewGame == null)
             {
                 myNewGame = new ChessParty()
